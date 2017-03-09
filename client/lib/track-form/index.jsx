@@ -31,10 +31,10 @@ export const trackForm = WrappedComponent => class TrackFormComponent extends Co
 		this.setState( { fields: newFields }, callback );
 	};
 
-	clearDirtyFields = () => {
+	clearDirtyFields = ( callback ) => {
 		this.setState( {
 			dirtyFields: []
-		} );
+		}, callback );
 	};
 
 	render() {

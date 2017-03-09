@@ -106,6 +106,20 @@ const wrapSettingsForm = getFormSettings => SettingsForm => {
 			this.props.trackEvent( 'Clicked Save Settings Button' );
 		};
 
+		toggleField = ( settings ) => {
+			const { settingsFields, siteId, jetpackSettingsUISupported } = this.props;
+
+			const submitField = () => {
+				this.props.saveSiteSettings( siteId, pick( settings, settingsFields.site ) );
+				if ( jetpackSettingsUISupported ) {
+					this.props.updateSettings( siteId, pick( settings, settingsFields.jetpack ) );
+				}
+			};
+
+			this.props.removeNotice( 'site-settings-save' );
+			this.props.updateFields( settings, submitField );
+		};
+
 		submitForm = () => {
 			const { fields, settingsFields, siteId, jetpackSettingsUISupported } = this.props;
 			this.props.removeNotice( 'site-settings-save' );
@@ -137,9 +151,7 @@ const wrapSettingsForm = getFormSettings => SettingsForm => {
 
 		handleAutosavingToggle = name => () => {
 			this.props.trackEvent( `Toggled ${ name }` );
-			this.props.updateFields( { [ name ]: ! this.props.fields[ name ] }, () => {
-				this.submitForm();
-			} );
+			this.toggleField( { [ name ]: ! this.props.fields[ name ] } );
 		};
 
 		onChangeField = field => event => {
