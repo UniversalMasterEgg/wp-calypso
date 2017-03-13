@@ -145,6 +145,7 @@ export default connect(
 	( state, ownProps ) => {
 		const selectedSite = getSelectedSite( state );
 		const selectedSiteId = getSelectedSiteId( state );
+		const domains = getDecoratedSiteDomains( state, selectedSiteId );
 
 		const isJetpack = isJetpackSite( state, selectedSiteId );
 		const isAutomatedTransfer = isSiteAutomatedTransfer( state, selectedSiteId );
@@ -152,13 +153,13 @@ export default connect(
 		return {
 			selectedSite,
 			selectedSiteId,
+			domains,
 			context: ownProps.context,
 			currentPlan: getCurrentPlan( state, selectedSiteId ),
 			isExpiring: isCurrentPlanExpiring( state, selectedSiteId ),
 			shouldShowDomainWarnings: ! isJetpack || isAutomatedTransfer,
-			hasDomainsLoaded: ! isRequestingSiteDomains( state, selectedSiteId ),
+			hasDomainsLoaded: !! domains,
 			isRequestingSitePlans: isRequestingSitePlans( state, selectedSiteId ),
-			domains: getDecoratedSiteDomains( state, selectedSiteId ),
 		};
 	}
 )( localize( CurrentPlan ) );
